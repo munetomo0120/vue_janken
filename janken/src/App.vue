@@ -1,65 +1,44 @@
 <template>
-  <div id="app">
-    <img src="http://vuejs.org/images/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vueify" target="_blank">vueify</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-  </div>
+    <div id="app">
+        <h1>じゃんけんゲーム</h1>
+        <ul class="nav">
+            <li><router-link to="/game">ゲーム</router-link></li>
+            <li><router-link to="/score">せいせき</router-link></li>
+        </ul>
+        <div class="inner">
+            <transition name="fade">
+                <router-view scores="scores"></router-view>
+            </transition>
+        </div>
+    </div>
 </template>
-
+ 
 <script>
-export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  }
-}
+    import Game from './components/Game.vue';
+    import Score from './components/Score.vue';
+    import Storage from './util/Storage';
+    let storage = new Storage();
+    export default {
+        name: 'app',
+        data () {
+            return {
+                scores: storage.getData('scores') || []
+            };
+        },
+        watch: {
+            scores : 'saveData'
+        },
+        components:{
+            Game,
+            Score
+        },
+        methods: {
+            saveData() {
+                storage.setData('scores', this.scores);
+            }
+        }
+    };
 </script>
-
 <style scoped>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-img {
-  width: 200px;
-  height: 200px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
+    /* css（省略）*/
 </style>
